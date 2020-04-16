@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Container, Avatar, Typography, Grid, TextField, Button } from '@material-ui/core'
-import LockOutlineIcon from '@material-ui/icons/LockOutlined';
+import { Container, Typography, Grid, TextField, Button } from '@material-ui/core'
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardMedia from '@material-ui/core/CardMedia';
 import { compose } from 'recompose';
 import { consumerFirebase } from '../../server';
 
@@ -11,26 +13,24 @@ const style = {
         flexDirection : "column",
         alignItems : "center"
     },
-    avatar : {
-        margin : 8,
-        background: "red"
-    },
     form : {
         width : "100%",
         marginTop : 10
     },
     submit : {
-        marginTop : 15,
+        marginTop : 20,
         marginBottom: 20
+    },
+    root: {
+        maxWidth: 345,
+        margin: 20
+      },
+    media: {
+       height: 220,
+       width:  220
     }
 }
 
-const usuarioInicial = {
-    nombre : '',
-    apellido : '',
-    email : '',
-    password : ''
-}
 
 class RegistrarUser extends Component {
     state = {
@@ -66,30 +66,48 @@ class RegistrarUser extends Component {
     registrarUsuario = e => {
         e.preventDefault();
         const { usuario, firebase } = this.state;
-        
-        firebase.db
-        .collection("Users")
-        .add(usuario)
-        .then(usuarioAfter => {
-            console.log("inserción exitosa", usuarioAfter);
-            this.setState({
-                usuario : usuarioInicial
+
+        firebase.auth
+        .createUserWithEmailAndPassword(usuario.email, usuario.password)
+        .then(auth => {
+
+            const usuarioDB = {
+                usuarioID : auth.user.uid,
+                email : usuario.email,
+                nombre : usuario.nombre,
+                apellido : usuario.apellido
+            };
+
+            firebase.db
+            .collection("Users")
+            .add(usuarioDB)
+            .then(usuarioAfter=>{
+                console.log("Inserción satisfactoria", usuarioAfter);
+                this.props.history.push('/')
+            })
+            .catch(error =>{
+                console.log("Ocurrió un error al registrar en BD",error);
             })
         })
         .catch(error => {
-            console.log("error", error);
+            console.log('Ocurrió un error al loguearse', error);
         })
+
     }
 
     render() {
         return (
             <Container maxWidth="md">
-                <div stylr={style.paper}>
-                    <Avatar style={style.avatar}>
-                        <LockOutlineIcon></LockOutlineIcon>
-                    </Avatar>
+                <div style={style.paper}>
+                    <Card style={style.root}>
+                        <CardActionArea>
+                            <CardMedia style={style.media}
+                                image="https://cdn.icon-icons.com/icons2/1715/PNG/512/2730360-hand-help-inkcontober-united_112704.png"
+                            />
+                        </CardActionArea>
+                    </Card>
                     <Typography component="h1" variant="h5">
-                        Registrar Cuenta
+                        Registrar cuenta
                     </Typography>
                     <form style={style.form}>
                         <Grid container spacing={2}>

@@ -17,7 +17,7 @@ const styles = theme => ({
         }
     },
     grow : {
-        flexGrow : 1 
+        flexGrow : 1
     }
 });
 
@@ -37,7 +37,7 @@ class BarSession extends Component {
                     </Typography>
                     <div className={classes.grow}></div>
                     <div className={classes.sectionDesktop}>
-                        <Button color="inherit">Iniciar sesión</Button>
+                        <Button color="inherit">Registrar cuenta</Button>
                     </div>
                     <div className={classes.sectionMobile}>
                         <IconButton color="inherit">
