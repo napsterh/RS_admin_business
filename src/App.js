@@ -17,9 +17,9 @@ function App(props) {
 
 
   useEffect(() =>{
-     firebase.estaIniciado().then(val=>{
-       setupFirebaseInicial(val);
-     })
+      firebase.estaIniciado().then(val=>{
+      setupFirebaseInicial(val);
+      })
   })
 
   return autenticacionIniciada !== false ? (
