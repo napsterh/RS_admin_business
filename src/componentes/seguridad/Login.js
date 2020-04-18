@@ -5,6 +5,10 @@ import { consumerFirebase } from '../../server';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
+import { iniciarSesion } from '../../session/actions/sesionAction';
+import { openMensajePantalla } from '../../session/actions/snackbarAction';
+
+import { StateContext } from '../../session/store';
 
 const style = {
     paper: {
@@ -33,6 +37,8 @@ const style = {
 
 
 class Login extends Component {
+    static contextType = StateContext;
+
     state = {
         firebase : null,
         usuario : {
@@ -60,19 +66,21 @@ class Login extends Component {
         })
     }
 
-    login = e => {
+    login = async e => {
         e.preventDefault();
-
+        const [{sesion}, dispatch] = this.context;
         const { firebase, usuario } = this.state;
+        const {email, password} = usuario;
 
-        firebase.auth
-        .signInWithEmailAndPassword(usuario.email, usuario.password)
-        .then(auth => {
-            this.props.history.push('/')
-        })
-        .catch(error =>{
-            console.log("Ocurrió un error",error);
-        })
+        let callback = await iniciarSesion(dispatch, firebase, email, password)
+        if(callback.status){
+            this.props.history.push("/");
+        }else{
+            openMensajePantalla(dispatch, {
+                open : true,
+                mensaje : callback.mensaje.message
+            });
+        }
     }
 
 

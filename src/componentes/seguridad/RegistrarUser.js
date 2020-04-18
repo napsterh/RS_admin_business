@@ -5,6 +5,9 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import { compose } from 'recompose';
 import { consumerFirebase } from '../../server';
+import { crearUsuario } from '../../session/actions/sesionAction';
+import { openMensajePantalla } from '../../session/actions/snackbarAction';
+import { StateContext } from '../../session/store';
 
 const style = {
     paper : {
@@ -33,6 +36,8 @@ const style = {
 
 
 class RegistrarUser extends Component {
+    static contextType = StateContext;
+
     state = {
         firebase : null,
         usuario : {
@@ -63,36 +68,20 @@ class RegistrarUser extends Component {
         })
     }
 
-    registrarUsuario = e => {
+    registrarUsuario = async e => {
         e.preventDefault();
-        const { usuario, firebase } = this.state;
+        const [{sesion}, dispatch] = this.context;
+        const {firebase, usuario} = this.state;
 
-        firebase.auth
-        .createUserWithEmailAndPassword(usuario.email, usuario.password)
-        .then(auth => {
-
-            const usuarioDB = {
-                usuarioID : auth.user.uid,
-                email : usuario.email,
-                nombre : usuario.nombre,
-                apellido : usuario.apellido
-            };
-
-            firebase.db
-            .collection("Users")
-            .add(usuarioDB)
-            .then(usuarioAfter=>{
-                console.log("Inserción satisfactoria", usuarioAfter);
-                this.props.history.push('/')
+        let callback = await crearUsuario(dispatch, firebase, usuario);
+        if(callback.status){
+            this.props.history.push("/")
+        }else{
+            openMensajePantalla(dispatch, {
+                open : true,
+                mensaje : callback.mensaje.message
             })
-            .catch(error =>{
-                console.log("Ocurrió un error al registrar en BD",error);
-            })
-        })
-        .catch(error => {
-            console.log('Ocurrió un error al loguearse', error);
-        })
-
+        }
     }
 
     render() {

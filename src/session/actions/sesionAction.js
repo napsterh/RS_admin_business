@@ -14,13 +14,14 @@ export const iniciarSesion = (dispatch, firebase, email, password) => {
                         dispatch({
                             type: "INICIAR_SESION",
                             sesion: usuarioDB,
-                            autenticado = true
+                            autenticado : true
                         });
-                        resolve();
+                        resolve({status: true});
                     });
             })
             .catch(error => {
                 console.log('error', error);
+                resolve({status: false, mensaje : error});
             });
     });
 };
@@ -48,11 +49,12 @@ export const crearUsuario = (dispatch, firebase, usuario) => {
                     sesion : usuario,
                     autenticado : true
                 });
-                resolve();
+                resolve({status:true});
             });
         })
         .catch(error => {
             console.log('error', error);
+            resolve({status:false, mensaje:error});
         });
     });
 };
@@ -77,4 +79,3 @@ export const CerrarSesion = (dispatch, firebase) => {
         })
     })
 }
- 
