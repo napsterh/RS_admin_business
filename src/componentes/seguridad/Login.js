@@ -74,11 +74,15 @@ class Login extends Component {
 
         let callback = await iniciarSesion(dispatch, firebase, email, password)
         if(callback.status){
+            openMensajePantalla(dispatch, {
+                open : true,
+                mensaje : "Inició sesión correctamente"
+            });
             this.props.history.push("/");
         }else{
             openMensajePantalla(dispatch, {
                 open : true,
-                mensaje : callback.mensaje.message
+                mensaje : "Usuario y/o contraseña incorrecta"
             });
         }
     }

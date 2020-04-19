@@ -14,9 +14,10 @@ import { FirebaseContext } from './server';
 import { useStateValue } from './session/store';
 //import openSnackbarReducer from './session/reducers/openSnackbarReducer';
 import RutaAutenticada from './componentes/seguridad/RutaAutenticada';
+import PerfilUsuario from './componentes/seguridad/PerfilUsuario';
 
 function App(props) {
-  
+
   let firebase = React.useContext(FirebaseContext);
 
   const [autenticacionIniciada, setupFirebaseInicial] = React.useState(false);
@@ -60,6 +61,7 @@ function App(props) {
           <Grid container>
             <Switch>
               <RutaAutenticada exact path="/" autenticadoFirebase={firebase.auth.currentUser} component={ListaBusiness} />
+              <PerfilUsuario exact path="/auth/perfil" autenticadoFirebase={firebase.auth.currentUser} component={ListaBusiness} />
               <Route path="/auth/login" exact component={Login} />
               <Route path="/auth/RegistrarUser" exact component={RegistrarUser} />
             </Switch>

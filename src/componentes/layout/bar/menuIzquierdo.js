@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { List, Link, ListItem, ListItemText, Divider, Collapse, ListItemIcon } from "@material-ui/core";
+import { List, ListItem, ListItemText, Divider, Collapse, ListItemIcon } from "@material-ui/core";
+import { Link } from 'react-router-dom';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YoutubeIcon from '@material-ui/icons/YouTube';
@@ -9,7 +10,7 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 export const MenuIzquierdo = ({classes}) => (
     <div className={classes.list}>
         <List>
-            <ListItem component={Link} button to="">
+            <ListItem component={Link} button to="/auth/perfil">
                 <i className="material-icons">account_box</i>
                 <ListItemText classes={{primary : classes.ListItemText}} primary="Perfil" />
             </ListItem>
