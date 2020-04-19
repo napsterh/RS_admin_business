@@ -19,37 +19,37 @@ export const MenuIzquierdo = ({classes}) => (
         <List>
             <ListItem component={Link} button to="">
                 <i className="material-icons">add_box</i>
-                <ListItemText className={{primary: classes.ListItemText}} primary="Nuevo Negocio" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary="Nuevo Negocio" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <i className="material-icons">business</i>
-                <ListItemText className={{primary: classes.ListItemText}} primary="Negocios" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary="Negocios" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <i className="material-icons">mail_outline</i>
-                <ListItemText className={{primary: classes.ListItemText}} primary="Mensajes" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary="Mensajes" />
             </ListItem>
         </List>
         <Divider />
         <List>
             <ListItem>
-                <ListItemText className={{primary: classes.ListItemText}} primary="Síguenos" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary="Síguenos" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <FacebookIcon />
-                <ListItemText className={{primary: classes.ListItemText}} primary=" Facebook" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary=" Facebook" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <InstagramIcon />
-                <ListItemText className={{primary: classes.ListItemText}} primary=" Instagram" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary=" Instagram" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <YoutubeIcon />
-                <ListItemText className={{primary: classes.ListItemText}} primary=" YouTube" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary=" YouTube" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <LinkedInIcon/>
-                <ListItemText className={{primary: classes.ListItemText}} primary=" LinkedIn" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary=" LinkedIn" />
             </ListItem>
         </List>
     </div>

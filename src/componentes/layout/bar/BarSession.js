@@ -97,7 +97,7 @@ class BarSession extends Component {
                 >
                     <div
                         role="Button"
-                        onclick={this.toggleDrawer("left", false)}
+                        onClick={this.toggleDrawer("left", false)}
                         onKeyDown={this.toggleDrawer("left", false)}
                     >
                         <MenuIzquierdo classes={classes}/>
@@ -111,7 +111,7 @@ class BarSession extends Component {
                 >
                     <div
                         role="Button"
-                        onclick={this.toggleDrawer("right", false)}
+                        onClick={this.toggleDrawer("right", false)}
                         onKeyDown={this.toggleDrawer("right", false)}
                     >
                         <MenuDerecha classes={classes} usuario={usuario} textoUsuario={textoUsuario} fotoUsuario={fotoUsuarioTemp} salirSesion={this.salirSesionApp} />

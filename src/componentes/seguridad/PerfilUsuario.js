@@ -85,7 +85,7 @@ const PerfilUsuario = props => {
 
     return (sesion
         ? (
-            <Container component="main" maxWith="md" justify="center">
+            <Container component="main" maxwith="md" justify="center">
                 <div style={style.paper}>
                     <Avatar style={style.avatar} src={estado.foto || reactFoto} />
                     <Typography style={style.tipography} component="h1" variant="h5">
