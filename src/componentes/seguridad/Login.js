@@ -12,7 +12,7 @@ import { StateContext } from '../../session/store';
 
 const style = {
     paper: {
-        marginTop: 9,
+        marginTop: 80,
         display: "flex",
         flexDirection: "column",
         alignItems: "center"
@@ -30,8 +30,8 @@ const style = {
         margin: 20
       },
     media: {
-       height: 220,
-       width:  220
+       height: 164,
+       width:  345
     }
 }
 
@@ -91,7 +91,7 @@ class Login extends Component {
                     <Card style={style.root}>
                         <CardActionArea>
                             <CardMedia style={style.media}
-                                image="https://cdn.icon-icons.com/icons2/1715/PNG/512/2730360-hand-help-inkcontober-united_112704.png"
+                                image="https://cdn.discordapp.com/attachments/701064473955401759/701219593254993960/La-ruta-solidaria-logo-transparente.png"
                             />
                         </CardActionArea>
                     </Card>
@@ -122,7 +122,7 @@ class Login extends Component {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         onClick={this.login}
                         >
                             Enviar

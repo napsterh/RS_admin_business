@@ -11,7 +11,7 @@ import { StateContext } from '../../session/store';
 
 const style = {
     paper : {
-        marginTop : 8,
+        marginTop : 80,
         display : "flex",
         flexDirection : "column",
         alignItems : "center"
@@ -29,8 +29,8 @@ const style = {
         margin: 20
       },
     media: {
-       height: 220,
-       width:  220
+        height: 164,
+        width:  345
     }
 }
 
@@ -91,7 +91,7 @@ class RegistrarUser extends Component {
                     <Card style={style.root}>
                         <CardActionArea>
                             <CardMedia style={style.media}
-                                image="https://cdn.icon-icons.com/icons2/1715/PNG/512/2730360-hand-help-inkcontober-united_112704.png"
+                                image="https://cdn.discordapp.com/attachments/701064473955401759/701219593254993960/La-ruta-solidaria-logo-transparente.png"
                             />
                         </CardActionArea>
                     </Card>
@@ -115,7 +115,7 @@ class RegistrarUser extends Component {
                         </Grid>
                         <Grid container justify="center">
                             <Grid item md={6} xs={6}>
-                                <Button type="submit" onClick={this.registrarUsuario} variant="contained" fullWidth size="large" color="primary" style={style.submit}>
+                                <Button type="submit" onClick={this.registrarUsuario} variant="contained" fullWidth size="large" color="secondary" style={style.submit}>
                                     Registrar
                                 </Button>
                             </Grid>
