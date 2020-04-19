@@ -82,7 +82,6 @@ class BarSession extends Component {
         return nuevosObjetos;
     }
 
-
     render() {
         const { classes } = this.props;
         const [{ sesion }, dispatch] = this.context;
@@ -128,13 +127,13 @@ class BarSession extends Component {
                     </Typography>
                     <div className={classes.grow}></div>
                     <div className={classes.sectionDesktop}>
+                        <Button color="inherit">{textoUsuario}</Button>
                         <IconButton color="inherit" component={Link} to="">
                             <i className="material-icons">mail_outline</i>
                         </IconButton>
                         <Button color="inherit" onClick={this.salirSesionApp}>
                             Salir
                         </Button>
-                        <Button color="inherit">{textoUsuario}</Button>
                         <Avatar
                             src={fotoUsuarioTemp}
                         >

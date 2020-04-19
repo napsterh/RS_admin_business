@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
-import { List, Link, ListItem, ListItemText, Divider } from "@material-ui/core";
+import { List, Link, ListItem, ListItemText, Divider, Collapse, ListItemIcon } from "@material-ui/core";
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import YoutubeIcon from '@material-ui/icons/YouTube';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 
 
 export const MenuIzquierdo = ({classes}) => (
@@ -23,6 +27,28 @@ export const MenuIzquierdo = ({classes}) => (
             <ListItem component={Link} button to="">
                 <i className="material-icons">mail_outline</i>
                 <ListItemText className={{primary: classes.ListItemText}} primary="Mensajes" />
+            </ListItem>
+        </List>
+        <Divider />
+        <List>
+            <ListItem>
+                <ListItemText className={{primary: classes.ListItemText}} primary="Síguenos" />
+            </ListItem>
+            <ListItem component={Link} button to="">
+                <FacebookIcon />
+                <ListItemText className={{primary: classes.ListItemText}} primary=" Facebook" />
+            </ListItem>
+            <ListItem component={Link} button to="">
+                <InstagramIcon />
+                <ListItemText className={{primary: classes.ListItemText}} primary=" Instagram" />
+            </ListItem>
+            <ListItem component={Link} button to="">
+                <YoutubeIcon />
+                <ListItemText className={{primary: classes.ListItemText}} primary=" YouTube" />
+            </ListItem>
+            <ListItem component={Link} button to="">
+                <LinkedInIcon/>
+                <ListItemText className={{primary: classes.ListItemText}} primary=" LinkedIn" />
             </ListItem>
         </List>
     </div>
