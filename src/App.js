@@ -13,9 +13,12 @@ import { FirebaseContext } from './server';
 
 import { useStateValue } from './session/store';
 //import openSnackbarReducer from './session/reducers/openSnackbarReducer';
+import RutaAutenticada from './componentes/seguridad/RutaAutenticada';
 
 function App(props) {
+  
   let firebase = React.useContext(FirebaseContext);
+
   const [autenticacionIniciada, setupFirebaseInicial] = React.useState(false);
 
   const [{ openSnackbar }, dispatch] = useStateValue();
@@ -56,9 +59,9 @@ function App(props) {
 
           <Grid container>
             <Switch>
-              <Route path="/" exact component={ListaBusiness}></Route>
-              <Route path="/auth/login" exact component={Login}></Route>
-              <Route path="/auth/RegistrarUser" exact component={RegistrarUser}></Route>
+              <RutaAutenticada exact path="/" autenticadoFirebase={firebase.auth.currentUser} component={ListaBusiness} />
+              <Route path="/auth/login" exact component={Login} />
+              <Route path="/auth/RegistrarUser" exact component={RegistrarUser} />
             </Switch>
           </Grid>
 
