@@ -47,10 +47,6 @@ export const MenuIzquierdo = ({classes}) => (
                 <YoutubeIcon />
                 <ListItemText classes={{primary: classes.ListItemText}} primary=" YouTube" />
             </ListItem>
-            <ListItem component={Link} button to="">
-                <LinkedInIcon/>
-                <ListItemText classes={{primary: classes.ListItemText}} primary=" LinkedIn" />
-            </ListItem>
         </List>
     </div>
 );
