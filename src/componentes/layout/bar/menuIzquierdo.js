@@ -33,7 +33,7 @@ export const MenuIzquierdo = ({classes}) => (
         <Divider />
         <List>
             <ListItem>
-                <ListItemText classes={{primary: classes.ListItemText}} primary="Síguenos" />
+                <ListItemText classes={{primary: classes.ListItemText}} primary="Síguenos en nuestras redes" />
             </ListItem>
             <ListItem component={Link} button to="">
                 <FacebookIcon />
