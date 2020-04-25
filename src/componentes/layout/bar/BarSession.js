@@ -114,7 +114,13 @@ class BarSession extends Component {
                         onClick={this.toggleDrawer("right", false)}
                         onKeyDown={this.toggleDrawer("right", false)}
                     >
-                        <MenuDerecha classes={classes} usuario={usuario} textoUsuario={textoUsuario} fotoUsuario={fotoUsuarioTemp} salirSesion={this.salirSesionApp} />
+                        <MenuDerecha
+                            classes={classes}
+                            usuario={usuario}
+                            textoUsuario={textoUsuario}
+                            fotoUsuario={usuario.foto || fotoUsuarioTemp}
+                            salirSesion={this.salirSesionApp}
+                        />
                     </div>
                 </Drawer>
 
@@ -135,7 +141,7 @@ class BarSession extends Component {
                             Salir
                         </Button>
                         <Avatar
-                            src={fotoUsuarioTemp}
+                            src={usuario.foto || fotoUsuarioTemp}
                         >
                         </Avatar>
                     </div>

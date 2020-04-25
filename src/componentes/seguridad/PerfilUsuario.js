@@ -4,6 +4,8 @@ import { Container, Typography, Grid, TextField, Button, Avatar } from '@materia
 import reactFoto from '../../logo.svg';
 import  { consumerFirebase } from '../../server';
 import { openMensajePantalla } from '../../session/actions/snackbarAction';
+import ImageUploader from 'react-images-upload';
+import uuid from 'uuid';
 
 const style = {
     paper: {
@@ -83,6 +85,46 @@ const PerfilUsuario = props => {
         }
     })
 
+    const subirFoto = fotos => {
+        //1: capturar imagen
+        const foto = fotos[0];
+        //2: Renombrar la imagen
+        const claveUnicaFoto = uuid.v4();
+        //3: Obtener nombre foto
+        const nombreFoto = foto.name;
+        //4: Obtener extension imagen
+        const extensionFoto = nombreFoto.split('.').pop();
+        //5: Crear nuevo nombre de la foto - alias
+        const alias = (nombreFoto.split('.')[0] + "_" + claveUnicaFoto + "." + extensionFoto).replace(/\s/g,"_").toLowerCase();
+        // homer.jpg --> homer_1867453186456153.jpg
+
+
+        firebase.guardarDocumento(alias, foto).then(metadata => {
+            firebase.devolverDocumento(alias).then(urlFoto => {
+                estado.foto = urlFoto;
+
+                firebase.db
+                .collection("Users")
+                .doc(firebase.auth.currentUser.uid)
+                .set(
+                    {
+                    foto : urlFoto
+                    },
+                    {merge: true}
+                )
+                .then(userBD => {
+                    dispatch({
+                        type: "INICIAR_SESION",
+                        sesion: estado,
+                        autenticado: true
+                    })
+                })
+            })
+        })
+    }
+
+    let fotoKey = uuid.v4();
+
     return (sesion
         ? (
             <Container component="main" maxwith="md" justify="center">
@@ -133,6 +175,19 @@ const PerfilUsuario = props => {
                                     onChange={cambiarDato}
                                 />
                             </Grid>
+
+                            <Grid item xs={12} md={12}>
+                                <ImageUploader
+                                withIcon={false}
+                                key={fotoKey}
+                                singleImage={true}
+                                buttonText="Seleccione una foto de perfil"
+                                onChange={subirFoto}
+                                imgExtension={[".jpg",".gif","png",".jpeg"]}
+                                maxFileSize={5242880}
+                                />
+                            </Grid>
+
                         </Grid>
                         <Grid container justify="center">
                             <Grid item xs={12} md={6}>
