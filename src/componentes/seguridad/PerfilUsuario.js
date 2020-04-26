@@ -140,7 +140,7 @@ const PerfilUsuario = props => {
                                     name="nombre"
                                     variant="outlined"
                                     fullWidth
-                                    label="Nombre"
+                                    label="Ingrese sus nombres"
                                     value={estado.nombre}
                                     onChange={cambiarDato}
                                 />
@@ -150,7 +150,7 @@ const PerfilUsuario = props => {
                                     name="apellido"
                                     variant="outlined"
                                     fullWidth
-                                    label="Apellidos"
+                                    label="Ingrese sus Apellidos"
                                     value={estado.apellido}
                                     onChange={cambiarDato}
                                 />
@@ -160,7 +160,7 @@ const PerfilUsuario = props => {
                                     name="email"
                                     variant="outlined"
                                     fullWidth
-                                    label="E-Mail"
+                                    label="Ingrese su E-Mail"
                                     value={estado.email}
                                     onChange={cambiarDato}
                                 />
@@ -170,7 +170,7 @@ const PerfilUsuario = props => {
                                     name="telefono"
                                     variant="outlined"
                                     fullWidth
-                                    label="Teléfono"
+                                    label="Ingrese su teléfono"
                                     value={estado.telefono}
                                     onChange={cambiarDato}
                                 />
