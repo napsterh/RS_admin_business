@@ -15,6 +15,7 @@ import { useStateValue } from './session/store';
 //import openSnackbarReducer from './session/reducers/openSnackbarReducer';
 import RutaAutenticada from './componentes/seguridad/RutaAutenticada';
 import PerfilUsuario from './componentes/seguridad/PerfilUsuario';
+import NuevoBusiness from './componentes/vistas/NuevoBusiness';
 
 function App(props) {
 
@@ -61,9 +62,10 @@ function App(props) {
           <Grid container>
             <Switch>
               <RutaAutenticada exact path="/" autenticadoFirebase={firebase.auth.currentUser} component={ListaBusiness} />
-              <PerfilUsuario exact path="/auth/perfil" autenticadoFirebase={firebase.auth.currentUser} component={ListaBusiness} />
+              <RutaAutenticada exact path="/auth/perfil" autenticadoFirebase={firebase.auth.currentUser} component={PerfilUsuario} />
+              <RutaAutenticada exact path="/negocio/nuevo" autenticadoFirebase={firebase.auth.currentUser} component={NuevoBusiness} />
               <Route path="/auth/login" exact component={Login} />
-              <Route path="/auth/RegistrarUser" exact component={RegistrarUser} />
+              <Route path="/auth/registrarUser" exact component={RegistrarUser} />
             </Switch>
           </Grid>
 

@@ -17,7 +17,7 @@ export const MenuIzquierdo = ({classes}) => (
         </List>
         <Divider />
         <List>
-            <ListItem component={Link} button to="">
+            <ListItem component={Link} button to="/negocio/nuevo">
                 <i className="material-icons">add_box</i>
                 <ListItemText classes={{primary: classes.ListItemText}} primary="Nuevo Negocio" />
             </ListItem>
