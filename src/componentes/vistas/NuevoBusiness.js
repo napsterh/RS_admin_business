@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, Checkbox, FormControlLabel, Button } from '@material-ui/core';
+import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, Button, Checkbox, FormControlLabel, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
+import { consumerFirebase } from '../../server';
+import { openMensajePantalla } from '../../session/actions/snackbarAction';
+import ReactImageUploadComponent from 'react-images-upload';
+
 
 const style = {
     container: {
@@ -22,15 +26,68 @@ const style = {
         height: 20,
         marginRight: '4px'
     },
-    submit : {
-        marginTop : 15,
-        marginButtom : 10
+    submit: {
+        marginTop: 15,
+        marginButtom: 10
+    },
+    foto: {
+        height: "100px"
     }
 }
 
 
-export default class NuevoBusiness extends Component {
+class NuevoBusiness extends Component {
 
+    state = {
+        negocio: {
+            direccion: '',
+            nombreNegocio: '',
+            distrito: '',
+            ciudad: '',
+            nombreP: '',
+            correo: '',
+            celular: '',
+            descripcion: '',
+            fotos: []
+        },
+        archivos: []
+    };
+
+    entradaDatoEstado = e => {
+        let negocio_ = Object.assign({}, this.state.negocio);
+        negocio_[e.target.name] = e.target.value
+        this.setState({
+            negocio: negocio_
+        });
+    };
+
+    subirFotos = documentos => {
+        Object.keys(documentos).forEach(function(key){
+            documentos[key].urlTemp = URL.createObjectURL(documentos[key]);
+        })
+
+        this.setState({
+            archivos : this.state.archivos.concat(documentos)
+        })
+
+    }
+
+    guardarNegocio = () => {
+        const {negocio} = this.state;
+
+        this.props.firebase.db
+            .collection("Business")
+            .add(negocio)
+            .then(success=>{
+                this.props.history.push("/");
+            })
+            .catch(error=>{
+                openMensajePantalla({
+                    open: true,
+                    mensaje: 'Ocurrió un error'
+                });
+            });
+    };
 
 
     render() {
@@ -48,11 +105,23 @@ export default class NuevoBusiness extends Component {
                             </Breadcrumbs>
                         </Grid>
 
-                        <Grid item xs={12} md={12}>
+                        <Grid item xs={12} md={6}>
                             <TextField
                                 name="direccion"
                                 label="Dirección del Negocio"
                                 fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.direccion}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                name="nombreNegocio"
+                                label="Nombre del Negocio"
+                                fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.nombreNegocio}
                             />
                         </Grid>
 
@@ -61,6 +130,8 @@ export default class NuevoBusiness extends Component {
                                 name="distrito"
                                 label="Distrito"
                                 fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.distrito}
                             />
                         </Grid>
 
@@ -69,6 +140,8 @@ export default class NuevoBusiness extends Component {
                                 name="ciudad"
                                 label="Ciudad"
                                 fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.ciudad}
                             />
                         </Grid>
 
@@ -77,6 +150,8 @@ export default class NuevoBusiness extends Component {
                                 name="nombreP"
                                 label="Nombre del propietario"
                                 fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.nombreP}
                             />
                         </Grid>
 
@@ -85,6 +160,8 @@ export default class NuevoBusiness extends Component {
                                 name="correo"
                                 label="Correo electrónico"
                                 fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.correo}
                             />
                         </Grid>
 
@@ -93,6 +170,8 @@ export default class NuevoBusiness extends Component {
                                 name="celular"
                                 label="Teléfono o celular"
                                 fullWidth
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.celular}
                             />
                         </Grid>
 
@@ -102,37 +181,54 @@ export default class NuevoBusiness extends Component {
                                 label="Descripción del negocio"
                                 fullWidth
                                 multiline
-                            />
-                        </Grid>
-
-                        <Grid item xs={6} md={3}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name="checkedA"
-                                        color="secondary"
-                                    />
-                                }
-                                label="Acepto delivery"
-                            />
-                        </Grid>
-
-                        <Grid item xs={6} md={3}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name="checkedB"
-                                        color="secondary"
-                                    />
-                                }
-                                label="Acepto recojo en tienda"
+                                onChange={this.entradaDatoEstado}
+                                value={this.state.negocio.descripcion}
                             />
                         </Grid>
 
                     </Grid>
 
                     <Grid container justify="center">
-                        <Grid sx={12} md={6}>
+                        <Grid item xs={12} sm={6}>
+                            <ReactImageUploadComponent
+                                key = {1000}
+                                withIcon = {true}
+                                buttontext = "Seleccione imagenes"
+                                onChange = {this.subirFotos}
+                                imgExtension = {[".jpg",".gif",".png",".jpeg"]}
+                                maxFileSize = {5242880}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Table>
+                                <TableBody>
+                                    {
+                                        this.state.archivos.map((archivo, i) => (
+                                            <TableRow key={i}>
+                                                <TableCell align="left">
+                                                    <img src={archivo.urlTemp} style={style.foto} />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        size="small"
+                                                        >
+                                                        Eliminar
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        </Grid>
+
+                    </Grid>
+
+                    <Grid container justify="center">
+                        <Grid item xs={12} md={6}>
                             <Button
                                 type="button"
                                 fullWidth
@@ -140,14 +236,17 @@ export default class NuevoBusiness extends Component {
                                 size="large"
                                 color="secondary"
                                 style={style.submit}
+                                onClick={this.guardarNegocio}
                             >
-                            Guardar
+                                Guardar
                             </Button>
                         </Grid>
                     </Grid>
 
                 </Paper>
             </Container>
-        )
+        );
     }
 }
+
+export default consumerFirebase(NuevoBusiness);
