@@ -4,6 +4,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import { consumerFirebase } from '../../server';
 import { openMensajePantalla } from '../../session/actions/snackbarAction';
 import ReactImageUploadComponent from 'react-images-upload';
+import uuid from 'uuid';
 
 
 const style = {
@@ -90,7 +91,20 @@ class NuevoBusiness extends Component {
     };
 
 
+    eliminarFoto = nombreFoto => () =>{
+        this.setState({
+            archivos: this.state.archivos.filter(archivo => {
+                return archivo.name !== nombreFoto
+            })
+        })
+    }
+
+
     render() {
+        let imagenKey = uuid.v4();
+
+
+
         return (
             <Container style={style.container}>
                 <Paper style={style.paper}>
@@ -191,7 +205,7 @@ class NuevoBusiness extends Component {
                     <Grid container justify="center">
                         <Grid item xs={12} sm={6}>
                             <ReactImageUploadComponent
-                                key = {1000}
+                                key = {imagenKey}
                                 withIcon = {true}
                                 buttontext = "Seleccione imagenes"
                                 onChange = {this.subirFotos}
@@ -214,6 +228,7 @@ class NuevoBusiness extends Component {
                                                         variant="contained"
                                                         color="primary"
                                                         size="small"
+                                                        onClick={this.eliminarFoto(archivo.name)}
                                                         >
                                                         Eliminar
                                                     </Button>
