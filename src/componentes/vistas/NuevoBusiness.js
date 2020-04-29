@@ -5,6 +5,7 @@ import { consumerFirebase } from '../../server';
 import { openMensajePantalla } from '../../session/actions/snackbarAction';
 import ReactImageUploadComponent from 'react-images-upload';
 import uuid from 'uuid';
+import { crearKeyword } from '../../session/actions/Keyword';
 
 
 const style = {
@@ -63,35 +64,53 @@ class NuevoBusiness extends Component {
     };
 
     subirFotos = documentos => {
-        Object.keys(documentos).forEach(function(key){
+        Object.keys(documentos).forEach(function (key) {
             documentos[key].urlTemp = URL.createObjectURL(documentos[key]);
         })
 
         this.setState({
-            archivos : this.state.archivos.concat(documentos)
+            archivos: this.state.archivos.concat(documentos)
         })
 
     }
 
     guardarNegocio = () => {
-        const {negocio} = this.state;
+        const { archivos, negocio } = this.state;
 
-        this.props.firebase.db
-            .collection("Business")
-            .add(negocio)
-            .then(success=>{
-                this.props.history.push("/");
-            })
-            .catch(error=>{
-                openMensajePantalla({
-                    open: true,
-                    mensaje: 'Ocurrió un error'
+        //crear a cada imagen(archivo) un alias para invocarlo despues
+
+        Object.keys(archivos).forEach(function (key) {
+            let valorDinamico = Math.floor(new Date().getTime() / 1000);
+            let nombre = archivos[key].name;
+            let extension = nombre.split(".").pop();
+            archivos[key].alias = (nombre.split(".")[0] + "_" + valorDinamico + "." + extension).replace(/\s/g, "_").toLowerCase();
+        })
+
+        const textoBusqueda = negocio.direccion + ' ' + negocio.distrito + ' ' + negocio.ciudad;
+        let keywords = crearKeyword(textoBusqueda);
+
+        this.props.firebase.guardarDocumentos(archivos).then(arregloUrls => {
+            negocio.fotos = arregloUrls;
+            negocio.keywords = keywords;
+
+            this.props.firebase.db
+                .collection("Business")
+                .add(negocio)
+                .then(success => {
+                    this.props.history.push("/");
+                })
+                .catch(error => {
+                    openMensajePantalla({
+                        open: true,
+                        mensaje: 'Ocurrió un error'
+                    });
                 });
-            });
+        })
+
     };
 
 
-    eliminarFoto = nombreFoto => () =>{
+    eliminarFoto = nombreFoto => () => {
         this.setState({
             archivos: this.state.archivos.filter(archivo => {
                 return archivo.name !== nombreFoto
@@ -205,12 +224,12 @@ class NuevoBusiness extends Component {
                     <Grid container justify="center">
                         <Grid item xs={12} sm={6}>
                             <ReactImageUploadComponent
-                                key = {imagenKey}
-                                withIcon = {true}
-                                buttontext = "Seleccione imagenes"
-                                onChange = {this.subirFotos}
-                                imgExtension = {[".jpg",".gif",".png",".jpeg"]}
-                                maxFileSize = {5242880}
+                                key={imagenKey}
+                                withIcon={true}
+                                buttontext="Seleccione imagenes"
+                                onChange={this.subirFotos}
+                                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                                maxFileSize={5242880}
                             />
                         </Grid>
 
@@ -229,7 +248,7 @@ class NuevoBusiness extends Component {
                                                         color="primary"
                                                         size="small"
                                                         onClick={this.eliminarFoto(archivo.name)}
-                                                        >
+                                                    >
                                                         Eliminar
                                                     </Button>
                                                 </TableCell>

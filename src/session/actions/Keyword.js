@@ -8,17 +8,16 @@ export const crearKeyword = text => {
 
         palabra.split("").forEach(letra => {
             palabraResumida += letra;
-            arregloKeywords.push(palabraResumida.toLocaleLowerCase());
+            arregloKeywords.push(palabraResumida.toLowerCase());
         });
     });
 
-    let letraResumida;
+    let letraResumida="";
     text.split("").forEach(letra => {
         letraResumida += letra;
         arregloKeywords.push(letraResumida);
     })
 
     return arregloKeywords;
-
 };
 
