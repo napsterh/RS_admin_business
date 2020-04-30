@@ -14,7 +14,7 @@ const style = {
     paper: {
         backgroundColor: "#f5f5f5",
         padding: "20px",
-        height: 650
+        minHeight: 650
     },
     link: {
         display: "flex"
@@ -44,8 +44,44 @@ class ListaBusiness extends Component {
     }
 
     cambiarBusquedaTexto = e => {
-        this.setState({
+        const self = this;
+        self.setState({
             [e.target.name] : e.target.value
+        })
+
+        if(self.state.typingTimeout){
+            clearTimeout(self.state.typingTimeout);
+        }
+
+        self.setState({
+            name : e.target.value,
+            typing : false,
+            typingTimeout : setTimeout(goTime => {
+                let objectQuery = this.props.firebase.db
+                .collection("Business")
+                .orderBy("distrito")
+                .where("keywords", "array-contains", self.state.textoBusqueda.toLowerCase());
+
+                if(self.state.textoBusqueda.trim() === ""){
+                    objectQuery = this.props.firebase.db
+                    .collection("Business")
+                    .orderBy("distrito")
+                }
+
+
+                objectQuery.get().then(snapshot => {
+                    const arrayNegocio = snapshot.docs.map(doc => {
+                        let data = doc.data();
+                        let id = doc.id;
+                        return {id, ...data};
+                    })
+
+                    this.setState({
+                        negocios : arrayNegocio
+                    })
+                })
+
+            }, 5000)
         })
     }
 
