@@ -76,12 +76,16 @@ const PerfilUsuario = props => {
         })
     }
 
+    const validarestadoformulario = sesion => {
+        if(sesion){
+            cambiarEstado(sesion.usuario);
+        }
+    }
+
     useEffect(()=>{
 
         if(estado.id === ""){
-            if(sesion){
-                cambiarEstado(sesion.usuario);
-            }
+            validarestadoformulario(sesion);
         }
     })
 
