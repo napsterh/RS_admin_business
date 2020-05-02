@@ -62,6 +62,18 @@ class EditarNegocio extends Component {
 
     }
 
+    async componentDidMount(){
+        const {id} = this.props.match.params;
+
+        const negocioCollection = this.props.firebase.db.collection("Business");
+        const negocioDB = await negocioCollection.doc(id).get();
+
+        this.setState({
+            negocio : negocioDB.data()
+        })
+    }
+
+
     render() {
         return (
             <Container style={style.container}>
