@@ -16,6 +16,7 @@ import { useStateValue } from './session/store';
 import RutaAutenticada from './componentes/seguridad/RutaAutenticada';
 import PerfilUsuario from './componentes/seguridad/PerfilUsuario';
 import NuevoBusiness from './componentes/vistas/NuevoBusiness';
+import EditarNegocio from './componentes/vistas/EditarNegocio';
 
 function App(props) {
 
@@ -64,6 +65,7 @@ function App(props) {
               <RutaAutenticada exact path="/" autenticadoFirebase={firebase.auth.currentUser} component={ListaBusiness} />
               <RutaAutenticada exact path="/auth/perfil" autenticadoFirebase={firebase.auth.currentUser} component={PerfilUsuario} />
               <RutaAutenticada exact path="/negocio/nuevo" autenticadoFirebase={firebase.auth.currentUser} component={NuevoBusiness} />
+              <RutaAutenticada exact path="/negocio/:id" autenticadoFirebase={firebase.auth.currentUser} component={EditarNegocio} />
               <Route path="/auth/login" exact component={Login} />
               <Route path="/auth/registrarUser" exact component={RegistrarUser} />
             </Switch>

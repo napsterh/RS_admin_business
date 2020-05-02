@@ -121,6 +121,10 @@ class ListaBusiness extends Component {
         })
     }
 
+    editarNegocio = id => {
+        this.props.history.push("/negocio/"+id)
+    }
+
     render() {
         return (
             <Container style={style.cardGrid}>
@@ -151,7 +155,7 @@ class ListaBusiness extends Component {
                     <Grid item xs={12} sm={12} style={style.gridTextfield}>
                         <Grid container spacing={4}>
                             {this.state.negocios.map(card => (
-                                <Grid item key={card.id} xs={12} sm={6} md={4}>
+                                <Grid item key={card.id} xs={12} sm={6} md={3}>
                                     <Card style={style.card}>
                                         <CardMedia
                                             style={style.cardMedia}
@@ -165,7 +169,10 @@ class ListaBusiness extends Component {
                                             title="Mi negocio"
                                         />
                                         <CardContent style={style.cardContent}>
-                                            <Typography gutterBottom variant="h5" component="h2">
+                                            <Typography gutterBottom variant="h6" component="h2">
+                                                {card.nombreNegocio}
+                                            </Typography>
+                                            <Typography gutterBottom variant="h6" component="h2">
                                                 {card.distrito + ", " + card.ciudad}
                                             </Typography>
                                         </CardContent>
@@ -173,6 +180,7 @@ class ListaBusiness extends Component {
                                             <Button
                                                 size="small"
                                                 color="secondary"
+                                                onClick={() => this.editarNegocio(card.id)}
                                             >
                                                 Editar
                                                 </Button>
