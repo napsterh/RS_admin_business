@@ -45,6 +45,8 @@ class Firebase {
 
     guardarDocumentos = (documentos) => this.storage.ref().guardarDocumentos(documentos);
 
+    eliminarDocumento = documento => this.storage.ref().child(documento).delete();
+
 }
 
 export default Firebase;

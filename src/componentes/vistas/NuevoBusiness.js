@@ -122,8 +122,6 @@ class NuevoBusiness extends Component {
     render() {
         let imagenKey = uuid.v4();
 
-
-
         return (
             <Container style={style.container}>
                 <Paper style={style.paper}>

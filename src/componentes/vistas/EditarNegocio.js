@@ -3,6 +3,8 @@ import { consumerFirebase } from '../../server';
 import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, Button, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import HomeIcon from "@material-ui/icons/Home";
 import ReactImageUploadComponent from 'react-images-upload';
+import uuid from 'uuid';
+import { crearKeyword } from '../../session/actions/Keyword';
 
 const style = {
     container : {
@@ -55,11 +57,57 @@ class EditarNegocio extends Component {
     }
 
     subirImagenes = imagenes => {
+        const { negocio } = this.state;
+        const {id} = this.props.match.params;
+        //Agregar un nombre dinamico por cada imagen que necesitemos subir a firestore
+
+        Object.keys(imagenes).forEach(key => {
+           let codigoDinamico = uuid.v4();
+           let nombreImagen = imagenes[key].name;
+           let extension = nombreImagen.split(".").pop();
+           imagenes[key].alias = (nombreImagen.split(".")[0] + "_" + codigoDinamico + "." +extension).replace(/\s/g, "_").toLowerCase();
+        })
+
+        this.props.firebase.guardarDocumentos(imagenes).then(urlImagenes => {
+            negocio.fotos = negocio.fotos.concat(urlImagenes);
+
+            this.props.firebase.db
+                .collection("Business")
+                .doc(id)
+                .set(negocio, {merge: true})
+                .then(success =>{
+                    this.setState({
+                        negocio
+                    })
+                })
+        })
 
     }
 
-    eliminarFoto = foto => () => {
+    eliminarFoto = fotoUrl => async () => {
 
+        const { negocio } = this.state;
+        const { id } = this.props.match.params;
+
+        let fotoID = fotoUrl.match(/[\w-]+.(jpg|png|jepg|gif|svg)/);
+        fotoID = fotoID[0];
+        await this.props.firebase.eliminarDocumento(fotoID);
+
+        let fotoList = this.state.negocio.fotos.filter(foto => {
+            return foto !== fotoUrl;
+        })
+
+        negocio.fotos = fotoList;
+
+        this.props.firebase.db
+        .collection("Business")
+        .doc(id)
+        .set(negocio, {merge: true})
+        .then(success => {
+            this.setState({
+                negocio
+            })
+        })
     }
 
     async componentDidMount(){
@@ -73,8 +121,27 @@ class EditarNegocio extends Component {
         })
     }
 
+    guardarNegocio = () => {
+        const { negocio } = this.state;
+        const {id} = this.props.match.params;
+
+        const textoBusqueda = negocio.direccion + " " + negocio.distrito + " " + negocio.ciudad;
+        const keywords = crearKeyword(textoBusqueda);
+
+        negocio.keywords = keywords;
+
+        this.props.firebase.db
+            .collection("Business")
+            .doc(id)
+            .set(negocio, {merge: true})
+            .then(success =>{
+                this.props.history.push("/");
+            })
+
+    }
 
     render() {
+        let uniqueID = uuid.v4();
         return (
             <Container style={style.container}>
                 <Paper style={style.paper}>
@@ -150,7 +217,7 @@ class EditarNegocio extends Component {
                     <Grid container justify="center">
                         <Grid item xs={12} sm={6}>
                             <ReactImageUploadComponent
-                                key={1000}
+                                key={uniqueID}
                                 withIcon={true}
                                 buttontext="Seleccione imagen"
                                 onChange={this.subirImagenes}
@@ -198,6 +265,7 @@ class EditarNegocio extends Component {
                                 size="large"
                                 color="secondary"
                                 style={style.submit}
+                                onClick={this.guardarNegocio}
                             >
                                 Guardar
                             </Button>
