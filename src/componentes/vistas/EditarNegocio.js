@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { consumerFirebase } from '../../server';
-import { Container, Paper, Grid, Breadcrumbs, Link, Typography } from '@material-ui/core';
+import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, Button } from '@material-ui/core';
 import HomeIcon from "@material-ui/icons/Home";
 
 const style = {
@@ -23,6 +23,10 @@ const style = {
         width: 20,
         height:20,
         marginRight: "4px"
+    },
+    submit: {
+        marginTop: 15,
+        marginButtom: 10
     }
 }
 
@@ -44,7 +48,66 @@ class EditarNegocio extends Component {
                                 </Typography>
                             </Breadcrumbs>
                         </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                name="direccion"
+                                label="Dirección del negocio"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                name="distrito"
+                                label="Distrito"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                name="ciudad"
+                                label="Ciudad"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                name="telefono"
+                                label="Teléfono"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                name="nombreP"
+                                label="Nombre del propietario"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                name="descripcion"
+                                label="Descripción de negocio"
+                                fullWidth
+                                rowsMax="4"
+                            />
+                        </Grid>
                     </Grid>
+
+                    <Grid container justify="center">
+                        <Grid item xs={12} md={6}>
+                            <Button
+                                type="button"
+                                fullWidth
+                                variant="contained"
+                                size="large"
+                                color="secondary"
+                                style={style.submit}
+                            >
+                                Guardar
+                            </Button>
+                        </Grid>
+                    </Grid>
+
                 </Paper>
             </Container>
         );
