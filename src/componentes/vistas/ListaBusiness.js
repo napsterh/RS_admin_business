@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, Card, CardContent, CardActions } from '@material-ui/core';
+import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, Card, CardContent, CardActions, ButtonGroup } from '@material-ui/core';
 import CardMedia from "@material-ui/core/CardMedia";
 import HomeIcon from '@material-ui/icons/Home';
 import { consumerFirebase } from '../../server';
 import logo from '../../logo.svg';
+import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import ArrowRight from '@material-ui/icons/ArrowRight';
+import { obtenerData, obtenerDataAnterior } from '../../session/actions/negocioAction';
 
 const style = {
     cardGrid: {
@@ -32,6 +35,9 @@ const style = {
     },
     cardContent: {
         flexGrow: 1
+    },
+    barraBoton: {
+        marginTop: "20px"
     }
 }
 
@@ -40,16 +46,20 @@ class ListaBusiness extends Component {
 
     state = {
         negocios: [],
-        textoBusqueda: ""
+        textoBusqueda: "",
+        paginas: [],
+        paginaSize: 3,
+        negocioInicial: null,
+        paginaActual: 0
     }
 
     cambiarBusquedaTexto = e => {
         const self = this;
         self.setState({
             [e.target.name]: e.target.value
-        })
+        });
 
-        if (self.state.typingTimeout) {
+        if(self.state.typingTimeout) {
             clearTimeout(self.state.typingTimeout);
         }
 
@@ -57,49 +67,97 @@ class ListaBusiness extends Component {
             name: e.target.value,
             typing: false,
             typingTimeout: setTimeout(goTime => {
-                let objectQuery = this.props.firebase.db
-                    .collection("Business")
-                    .orderBy("distrito")
-                    .where("keywords", "array-contains", self.state.textoBusqueda.toLowerCase());
 
-                if (self.state.textoBusqueda.trim() === "") {
-                    objectQuery = this.props.firebase.db
-                        .collection("Business")
-                        .orderBy("distrito")
-                }
+                const firebase = this.props.firebase;
+                const {paginaSize} = this.state;
 
-
-                objectQuery.get().then(snapshot => {
-                    const arrayNegocio = snapshot.docs.map(doc => {
-                        let data = doc.data();
-                        let id = doc.id;
-                        return { id, ...data };
-                    })
+                obtenerDataAnterior(firebase, paginaSize, 0, self.state.textoBusqueda).then(firebaseReturnData => {
+                    const pagina = {
+                        inicialValor : firebaseReturnData.inicialValor,
+                        finalValor : firebaseReturnData.finalValor
+                    }
+                    const paginas = [];
+                    paginas.push(pagina);
 
                     this.setState({
-                        negocios: arrayNegocio
+                        paginaActual : 0,
+                        paginas,
+                        negocios : firebaseReturnData.arrayNegocios
                     })
+
                 })
 
-            }, 5000)
+            }, 500)
+        });
+    };
+
+    anteriorPagina = () => {
+        const { paginaActual, paginaSize, textoBusqueda, paginas } = this.state;
+
+        if(paginaActual > 0){
+            const firebase = this.props.firebase;
+
+            obtenerDataAnterior(firebase, paginaSize, paginas[paginaActual-1].inicialValor, textoBusqueda).then(firebaseReturnData => {
+                const pagina = {
+                    inicialValor : firebaseReturnData.inicialValor,
+                    finalValor : firebaseReturnData.finalValor
+                }
+
+                paginas.push(pagina);
+
+                this.setState({
+                    paginas,
+                    paginaActual : paginaActual - 1,
+                    negocios : firebaseReturnData.arrayNegocios
+                })
+
+            })
+        }
+    }
+
+    siguientePagina = () => {
+        const { paginaActual, paginaSize, textoBusqueda, paginas, negocioInicial } = this.state;
+        const firebase = this.props.firebase;
+
+        obtenerData(firebase, paginaSize, paginas[paginaActual].finalValor, textoBusqueda).then(firebaseReturnData => {
+
+            if(firebaseReturnData.arrayNegocios.length > 0){
+                const pagina = {
+                    inicialValor : firebaseReturnData.inicialValor,
+                    finalValor : firebaseReturnData.finalValor
+                }
+
+                paginas.push(pagina);
+                this.setState({
+                    paginas,
+                    paginaActual : paginaActual + 1,
+                    negocios : firebaseReturnData.arrayNegocios
+                })
+            }
         })
     }
 
     async componentDidMount() {
-        let objectQuery = this.props.firebase.db.collection("Business").orderBy("direccion");
 
-        const snapshot = await objectQuery.get();
+        const { paginaSize, textoBusqueda, negocioInicial, paginas } = this.state;
 
-        const arrayNegocio = snapshot.docs.map(doc => {
-            let data = doc.data();
-            console.log(data);
-            let id = doc.id;
-            return { id, ...data };
-        })
+        const firebase = this.props.firebase;
+
+        const firebaseReturnData = await obtenerData(firebase, paginaSize, negocioInicial, textoBusqueda);
+
+        const pagina = {
+            inicialValor : firebaseReturnData.inicialValor,
+            finalValor : firebaseReturnData.finalValor
+        }
+
+        paginas.push(pagina);
 
         this.setState({
-            negocios: arrayNegocio
-        });
+            negocios : firebaseReturnData.arrayNegocios,
+            paginas,
+            paginaActual : 0
+        })
+
     }
 
     eliminarNegocio = id => {
@@ -150,6 +208,19 @@ class ListaBusiness extends Component {
                             onChange={this.cambiarBusquedaTexto}
                             value={this.state.textoBusqueda}
                         />
+                    </Grid>
+
+                    <Grid item xs={12} md={12} style={style.barraBoton}>
+                        <Grid container spacing={1} direction="column" alignItems="flex-end">
+                            <ButtonGroup size="small" aria-label="small outlined group">
+                                <Button onClick={this.anteriorPagina}>
+                                    <ArrowLeft />
+                                </Button>
+                                <Button onClick={this.siguientePagina}>
+                                    <ArrowRight />
+                                </Button>
+                            </ButtonGroup>
+                        </Grid>
                     </Grid>
 
                     <Grid item xs={12} sm={12} style={style.gridTextfield}>
