@@ -182,7 +182,8 @@ const PerfilUsuario = props => {
 
                             <Grid item xs={12} md={12}>
                                 <ImageUploader
-                                withIcon={false}
+                                withIcon={true}
+                                withLabel={false}
                                 key={fotoKey}
                                 singleImage={true}
                                 buttonText="Seleccione una foto de perfil"

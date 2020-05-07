@@ -219,6 +219,7 @@ class EditarNegocio extends Component {
                             <ReactImageUploadComponent
                                 key={uniqueID}
                                 withIcon={true}
+                                withLabel={false}
                                 buttontext="Seleccione imagen"
                                 onChange={this.subirImagenes}
                                 imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}

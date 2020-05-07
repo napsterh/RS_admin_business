@@ -34,6 +34,9 @@ const style = {
     },
     foto: {
         height: "100px"
+    },
+    image: {
+        marginTop: 15
     }
 }
 
@@ -219,12 +222,13 @@ class NuevoBusiness extends Component {
 
                     </Grid>
 
-                    <Grid container justify="center">
+                    <Grid container justify="center" style={style.image}>
                         <Grid item xs={12} sm={6}>
                             <ReactImageUploadComponent
                                 key={imagenKey}
                                 withIcon={true}
-                                buttontext="Seleccione imagenes"
+                                withLabel={false}
+                                buttonText="Seleccione imagenes"
                                 onChange={this.subirFotos}
                                 imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                                 maxFileSize={5242880}

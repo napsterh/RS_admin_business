@@ -48,7 +48,7 @@ class ListaBusiness extends Component {
         negocios: [],
         textoBusqueda: "",
         paginas: [],
-        paginaSize: 3,
+        paginaSize: 8,
         negocioInicial: null,
         paginaActual: 0
     }
