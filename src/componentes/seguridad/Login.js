@@ -92,6 +92,26 @@ class Login extends Component {
     }
 
 
+    resetearPassword = () => {
+        const {firebase, usuario} = this.state;
+        const [{sesion}, dispatch] = this.context;
+
+        firebase.auth.sendPasswordResetEmail(usuario.email)
+            .then(success => {
+                openMensajePantalla(dispatch, {
+                    open: true,
+                    mensaje: "Se ha enviado un correo electrónico a tu cuenta"
+                })
+            })
+            .catch(error => {
+                openMensajePantalla(dispatch, {
+                    open: true,
+                    mensaje: error.message
+                })
+            })
+    }
+
+
     render() {
         return (
             <Container maxWidth="xs">
@@ -126,7 +146,7 @@ class Login extends Component {
                             onChange = {this.onChange}
                             value = {this.state.usuario.password}
                         />
-                        <Button style={style.button}
+                        <Button
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -138,12 +158,12 @@ class Login extends Component {
                         </Button>
 
                         <Grid container>
-                            <Link href="#" variant="body2">
+                            <Link href="#" variant="body2" onClick={this.resetearPassword}>
                                 {"Olvidó su contraseña?"}
                             </Link>
                         </Grid>
-                        <Grid container>
-                            <Link href="/auth/Registrarusuario" variant="body2">
+                        <Grid>
+                            <Link href="/auth/registrarUser" variant="body2">
                                 {"No tienes una cuenta? Regístrate"}
                             </Link>
                         </Grid>
