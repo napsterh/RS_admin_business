@@ -139,6 +139,7 @@ class ListaBusiness extends Component {
 
     async componentDidMount() {
 
+
         const { paginaSize, textoBusqueda, negocioInicial, paginas } = this.state;
 
         const firebase = this.props.firebase;

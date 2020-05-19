@@ -1,6 +1,6 @@
 import React, { Component, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import {  Snackbar } from '@material-ui/core';
+import {  Snackbar, CircularProgress } from '@material-ui/core';
 import './App.css';
 import ListaBusiness from './componentes/vistas/ListaBusiness';
 import AppNavBar from './componentes/layout/AppNavbar';

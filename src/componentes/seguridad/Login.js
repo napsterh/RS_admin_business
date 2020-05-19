@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Typography, TextField, Button } from '@material-ui/core';
+import { Container, Typography, TextField, Button, Grid, Link } from '@material-ui/core';
 import { compose } from 'recompose';
 import { consumerFirebase } from '../../server';
 import Card from '@material-ui/core/Card';
@@ -32,6 +32,10 @@ const style = {
     media: {
        height: 164,
        width:  345
+    },
+    submit: {
+        marginTop: 10,
+        marginBottom: 20
     }
 }
 
@@ -128,10 +132,31 @@ class Login extends Component {
                         variant="contained"
                         color="secondary"
                         onClick={this.login}
+                        style={style.submit}
                         >
                             Enviar
                         </Button>
+
+                        <Grid container>
+                            <Link href="#" variant="body2">
+                                {"Olvidó su contraseña?"}
+                            </Link>
+                        </Grid>
+                        <Grid container>
+                            <Link href="/auth/Registrarusuario" variant="body2">
+                                {"No tienes una cuenta? Regístrate"}
+                            </Link>
+                        </Grid>
                     </form>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        style={style.submit}
+                        href="#"
+                    >
+                        Ingrese con su teléfono
+                    </Button>
                 </div>
             </Container>
         )
