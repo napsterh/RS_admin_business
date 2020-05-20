@@ -10,6 +10,7 @@ import theme from './theme/theme';
 import RegistrarUser from './componentes/seguridad/RegistrarUser';
 import Login from './componentes/seguridad/Login';
 import { FirebaseContext } from './server';
+import LoginTelefono from './componentes/seguridad/LoginTelefono';
 
 import { useStateValue } from './session/store';
 //import openSnackbarReducer from './session/reducers/openSnackbarReducer';
@@ -68,6 +69,7 @@ function App(props) {
               <RutaAutenticada exact path="/negocio/:id" autenticadoFirebase={firebase.auth.currentUser} component={EditarNegocio} />
               <Route path="/auth/login" exact component={Login} />
               <Route path="/auth/registrarUser" exact component={RegistrarUser} />
+              <Route path="/auth/loginPhone" exact component={LoginTelefono} />
             </Switch>
           </Grid>
 
