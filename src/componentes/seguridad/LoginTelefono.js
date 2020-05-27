@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as firebaseui from 'firebaseui';
+import  { consumerFirebase } from '../../server';
 import { Container, Typography, Grid, TextField, Button, Card, CardActionArea, CardMedia } from '@material-ui/core';
 
 const style = {
@@ -37,7 +38,35 @@ const style = {
 
 
 class LoginTelefono extends Component {
-    
+
+
+    componentDidMount(){
+        const {firebase} = this.props;
+
+        firebase.auth.languageCode = "es";
+        window.recaptchaVerifier = new firebase.authorization.RecaptchaVerifier(
+            this.recaptcha,
+            {
+                size : "normal",
+                callback : response => {
+                    this.setState({
+                        disable : false
+                    })
+                },
+                "expired-callback" : function(){
+                    this.setState({
+                        disable: true
+                    })
+                }
+            }
+        );
+
+        window.recaptchaVerifier.render().then(function(widgetID){
+            window.recaptchaVerifierId = widgetID;
+        });
+
+    }
+
     render() {
         return (
             <Container maxWidth="xs">
@@ -53,7 +82,7 @@ class LoginTelefono extends Component {
                         Ingrese número telefónico
                     </Typography>
                     <form style={style.form}>
-                        <Grid conatiner style={style.captcha} justify="center">
+                        <Grid container style={style.captcha} justify="center">
                             <div ref={ref => (this.recaptcha = ref)}></div>
                         </Grid>
                         <TextField
@@ -78,4 +107,4 @@ class LoginTelefono extends Component {
     }
 }
 
-export default LoginTelefono;
+export default consumerFirebase(LoginTelefono);

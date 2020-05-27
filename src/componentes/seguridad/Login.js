@@ -123,7 +123,7 @@ class Login extends Component {
                             />
                         </CardActionArea>
                     </Card>
-                    <Typography Component="h1" variant="h5">
+                    <Typography component="h1" variant="h5">
                         Iniciar sesión
                     </Typography>
                     <form style={style.form}>
