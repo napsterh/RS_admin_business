@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as firebaseui from 'firebaseui';
 import  { consumerFirebase } from '../../server';
-import { Container, Typography, Grid, TextField, Button, Card, CardActionArea, CardMedia } from '@material-ui/core';
+import { Container, Typography, Grid, TextField, Button, Card, CardActionArea, CardMedia, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 
 const style = {
     paper: {
@@ -39,6 +39,11 @@ const style = {
 
 class LoginTelefono extends Component {
 
+    state= {
+        disable : true,
+        dialogAbierto : false
+    }
+
 
     componentDidMount(){
         const {firebase} = this.props;
@@ -67,9 +72,31 @@ class LoginTelefono extends Component {
 
     }
 
+    verificarNumero = e => {
+        e.preventDefault();
+        this.setState({
+            dialogAbierto : true
+        })
+    }
+
     render() {
         return (
             <Container maxWidth="xs">
+                <Dialog open={this.state.dialogAbierto} onClose={() => { this.setState({dialogAbierto: false}) }}>
+                    <DialogTitle>Ingrese su código</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Ingrese el código que recibio por mensaje de texto
+                        </DialogContentText>
+                        <TextField autoFocus margin="dense" name="codigo" fullWidth />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="secondary" onClick={() => { this.setState({dialogAbierto: false}) }}>Cancelar</Button>
+                        <Button color="secondary">Verificar</Button>
+                    </DialogActions>
+
+                </Dialog>
+
                 <div style={style.paper}>
                     <Card style={style.root}>
                         <CardActionArea>
@@ -97,6 +124,8 @@ class LoginTelefono extends Component {
                             variant="contained"
                             color="secondary"
                             style={style.submit}
+                            onClick={this.verificarNumero}
+                            disabled = {this.state.disable}
                         >
                             Enviar
                         </Button>
